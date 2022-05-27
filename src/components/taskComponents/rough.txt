@@ -1,0 +1,164 @@
+<script>
+    import { randomCorrect } from "../taskjs/right";
+    import { randomWrong } from "../taskjs/wrong";
+  
+    let sImg = "";
+    let user_resp = "";
+    let showNext = "none";   
+    let showPopUp;
+    let c_Ans = "";
+    let rn_In = [];
+    let ques_shape = [{shape:"Squares",img_dis:""},{shape:"Triangles",img_dis:""},{shape:"Rectangles",img_dis:""},{shape:"Circles",img_dis:""}]
+    let ans_shape = [];
+    let q_In = 0;
+    //let q_Img1 = "";
+    //let q_Img2 = "";
+    //let q_Img3 = "";
+    //let q_Img4 = "";
+    let ques_shapeq_Img3 = "";
+    let sArray = [
+        //{id:0, color:"", shape:"", img_src:"empty_box_for_shape.png"},
+        {shape:"Square", img_src:"images/shapes/box_with_red_square.png"},
+        {shape:"Square", img_src:"images/shapes/box_with_blue_square.png"},
+        {shape:"Square", img_src:"images/shapes/box_with_green_square.png"},
+        {shape:"Square", img_src:"images/shapes/box_with_yellow_square.png"},
+        {shape:"Square", img_src:"images/shapes/box_with_pink_square.png"},
+        {shape:"Square", img_src:"images/shapes/box_with_white_square.png"},
+        {shape:"Square", img_src:"images/shapes/box_with_black_square.png"},
+        {shape:"Triangle", img_src:"images/shapes/box_with_red_triangle.png"},
+        {shape:"Triangle", img_src:"images/shapes/box_with_blue_triangle.png"},
+        {shape:"Triangle", img_src:"images/shapes/box_with_green_triangle.png"},
+        {shape:"Triangle", img_src:"images/shapes/box_with_yellow_triangle.png"},
+        {shape:"Triangle", img_src:"images/shapes/box_with_pink_triangle.png"},
+        {shape:"Triangle", img_src:"images/shapes/box_with_white_triangle.png"},
+        {shape:"Triangle", img_src:"images/shapes/box_with_black_triangle.png"},
+        {shape:"Rectangle", img_src:"images/shapes/box_with_red_rectangle.png"},
+        {shape:"Rectangle", img_src:"images/shapes/box_with_blue_rectangle.png"},
+        {shape:"Rectangle", img_src:"images/shapes/box_with_green_rectangle.png"},
+        {shape:"Rectangle", img_src:"images/shapes/box_with_yellow_rectangle.png"},
+        {shape:"Rectangle", img_src:"images/shapes/box_with_pink_rectangle.png"},
+        {shape:"Rectangle", img_src:"images/shapes/box_with_white_rectangle.png"},
+        {shape:"Rectangle", img_src:"images/shapes/box_with_black_rectangle.png"},
+        {shape:"Circle", img_src:"images/shapes/box_with_red_circle.png"},
+        {shape:"Circle", img_src:"images/shapes/box_with_blue_circle.png"},
+        {shape:"Circle", img_src:"images/shapes/box_with_green_circle.png"},
+        {shape:"Circle", img_src:"images/shapes/box_with_yellow_circle.png"},
+        {shape:"Circle", img_src:"images/shapes/box_with_pink_circle.png"},
+        {shape:"Circle", img_src:"images/shapes/box_with_white_circle.png"},
+        {shape:"Circle", img_src:"images/shapes/box_with_black_circle.png"}
+    ];
+  
+
+    function initImgs() {
+      c_Ans = null;
+      user_resp = null;
+      q_In = Math.floor(Math.random() * ques_shape.length);
+      for(let i=0;i<ques_shape.length;i++){
+        rn_In[i] = Math.floor(Math.random() * sArray.length);
+      }
+       
+      //rn_In[0] = Math.floor(Math.random() * sArray.length);
+      //rn_In[1] = Math.floor(Math.random() * sArray.length);
+      //rn_In[2] = Math.floor(Math.random() * sArray.length);
+      //rn_In[3] = Math.floor(Math.random() * sArray.length);
+      //ques_shape[rn_In[0]].img_src = sArray[rn_In[0]].img_src;
+      //ques_shape[rn_In[1]].img_src = sArray[rn_In[1]].img_src;
+      //ques_shape[rn_In[2]].img_src = sArray[rn_In[2]].img_src;
+      //ques_shape[rn_In[3]].img_src = sArray[rn_In[3]].img_src;
+      //sImg = sArray[rnIn].img_src;
+      c_Ans = ques_shape[q_In].shape;
+      
+      showNext = "none";
+      //console.log("hi");
+    }
+    initImgs();
+  
+    function assign_resp(p_Ans) {
+      user_resp = p_Ans;
+    }
+  
+    function checkAns() {
+      
+      console.log("ans check: ", user_resp);
+      showNext = "inline-block";
+      if (user_resp == c_Ans) {
+        
+        showPopUp = randomCorrect();
+        return;
+      } else {
+        
+        showPopUp = randomWrong();
+      }
+    }
+  </script>
+  
+  <div>
+    <h4>Two-Dimensional Shapes</h4>
+    <h5>Select all the {ques_shape[q_In].shape}</h5>
+    <div>
+        <p>{rn_In[0]}--------------{rn_In[1]}-------------{rn_In[2]}---------------{rn_In[3]}</p>
+    </div>
+    <div>
+      <!--
+      <p>{rn_In[0]}--------------{rn_In[1]}-------------{rn_In[2]}---------------{rn_In[3]}</p>
+      <p>{q_Img1}</p>
+      <img src={q_Img1} alt="" width="30%" />
+      <img src={q_Img2} alt="" width="30%" />
+      <img src={q_Img3} alt="" width="30%" />
+      <img src={q_Img4} alt="" width="30%" />
+      -->
+      
+      <button
+        type="button"
+        class="btn rerun"
+        on:click={() => assign_resp(sArray[rn_In[0]].shape)}><img src={sArray[rn_In[0]].img_src} alt="" width="30%" /></button
+      >
+      <p>{sArray[rn_In[0]].shape}</p>
+      <button
+        type="button"
+        class="btn rerun"
+        on:click={() => assign_resp(sArray[rn_In[1]].shape)}><img src={sArray[rn_In[1]].img_src} alt="" width="30%" /></button
+      >
+      <button
+        type="button"
+        class="btn rerun"
+        on:click={() => assign_resp(sArray[rn_In[2]].shape)}><img src={sArray[rn_In[2]].img_src} alt="" width="30%" /></button
+      >
+      <button
+        type="button"
+        class="btn rerun"
+        on:click={() => assign_resp(sArray[rn_In[3]].shape)}><img src={sArray[rn_In[3]].img_src} alt="" width="30%" /></button
+      >
+      
+
+    </div>
+    <h5 style=" display: {showNext};" class="mt-5">{showPopUp}</h5>
+    <!--
+    {#if def_ans}
+      {#if parseInt(user_resp) === parseInt(c_Ans)}
+        <p>{showPopUp}</p>
+      {:else}
+        <p>{showPopUp}</p>
+      {/if}
+    {/if}
+    -->
+    <!--
+    used for knowing the working of code
+    <p>user_response is {user_resp}</p> 
+    -->
+    <div>
+      
+      <p>{user_resp}</p>
+      <button type="button" class="btn rerun" on:click={() => checkAns()}
+        >Submit</button
+      >
+      <button type="button" class="btn rerun" on:click={() => initImgs()}
+        >Rerun</button
+      >
+    </div>
+    <p>the correct answer is {c_Ans}</p>
+  </div>
+  
+
+  ======================================================================================================================================================
+
