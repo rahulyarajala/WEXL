@@ -1,118 +1,103 @@
 <script>
+  import { shapeArray } from "./G1_MA_shapes"
   import { randomCorrect } from "../taskjs/right";
   import { randomWrong } from "../taskjs/wrong";
 
-  let user_resp = null;
   let showNext = "none";
   let showPopUp;
-  let ques_Array = ["more", "less"];
-  let qIn = 0;
-
-  let rnIn = [];
-  let sImg = [];
-  let c_Ans = 0;
-  let def_ans = '';
-  let sArray = [
-    { sides: 4, img_src: "images/shapes/blackSquare.png" },
-    { sides: 4, img_src: "images/shapes/blackRectangle.png" },
-    { sides: 3, img_src: "images/shapes/blackTriangle.png" },
-    { sides: 6, img_src: "images/shapes/blackHexagon.png" },
-    { sides: 8, img_src: "images/shapes/blackOctagon.png" },
-    { sides: 5, img_src: "images/shapes/blackPentagon.png" },
+  let ques_Array = ["more","fewer"];
+  let qrn_In = 0;
+  let rn_for_US = [];
+  let selectionArray = [
+    { s_optVal: 0, s_img: ""},
+    { s_optVal: 0, s_img: ""},
   ];
-
+  let c_Ans = 0; 
+  let user_resp = 0;
+  let sArray = shapeArray;
   function initImgs() {
-    c_Ans = null;
-    user_resp = null;
-    qIn = Math.floor(Math.random() * ques_Array.length);
-    for (let i = 0; i < ques_Array.length; i++) {
-        do{
-            rnIn[i] = Math.floor(Math.random() * sArray.length);
-            sImg[i] = sArray[rnIn[i]].img_src;
+    // random shape identified
+    c_Ans = 0;
+    user_resp = 0;
+    qrn_In = Math.floor(Math.random() * ques_Array.length);
+    //making the the false null for every reinitialization
+    //randomly fill 4 choices for user to select
+    for (let i = 0; i < selectionArray.length; i++) {   
+      rn_for_US[i] = Math.floor(Math.random() * sArray.length);
+      selectionArray[i].s_img = sArray[rn_for_US[i]].img_src;
+      selectionArray[i].s_optVal = sArray[rn_for_US[i]].sides;
+    };
+    //for assigning the correct answer
+    for(let i=0;i<selectionArray.length;i++){
+      if (ques_Array[qrn_In] == ques_Array[0]){
+        if(selectionArray[0].s_optVal >  selectionArray[1].s_optVal){
+          c_Ans = selectionArray[0].s_optVal;
         }
-        while(rnIn[i] == rnIn[i-1]);
+        else{
+          c_Ans = selectionArray[1].s_optVal;
+        }
+      }
+      else {
+        if(selectionArray[0].s_optVal <  selectionArray[1].s_optVal){
+          c_Ans = selectionArray[0].s_optVal;
+        }
+        else{
+          c_Ans = selectionArray[1].s_optVal;
+        }
+      }
     }
-    //rnIn = Math.floor(Math.random() * sArray.length);
-    //sImg = sArray[rnIn].img_src;
-    //c_Ans = ques_Array[qIn];
-    def_ans = assign_Ans();
-    c_Ans = def_ans;
-    //showPopUp = null;
+    showPopUp = null;
     showNext = "none";
-    //console.log("hi");
   }
   initImgs();
-
-  function assign_resp(p_Ans) {
-    user_resp = p_Ans;
-  }
   
-  function assign_Ans() {
-    if (ques_Array[qIn] == ques_Array[0]){
-        if(sArray[rnIn[0]].sides >  sArray[rnIn[1]]){
-            c_Ans = sArray[rnIn[0]].sides;
-        }
-        else{
-            c_Ans = sArray[rnIn[1]].sides;
-        }
-    }
-    else {
-        if(sArray[rnIn[0]].sides <  sArray[rnIn[1]]){
-            c_Ans = sArray[rnIn[0]].sides;
-        }
-        else{
-            c_Ans = sArray[rnIn[1]].sides;
-        }
-    }
+  function assign_resp(resp){
+    user_resp = resp;
   }
-  function checkAns() {
-    //user_resp = p_Ans ;
-    console.log("ans check: ", user_resp);
-      showNext = "inline-block";
-      if (user_resp == c_Ans) {
-        //def_ans = true;
-        showPopUp = randomCorrect();
-        return;
-      } else {
-        //def_ans = true;
-        showPopUp = randomWrong();
-      }
-     
+  function result(resp) {    
+    //console.log('inside result')
+    //console.log('user resp is',{user_resp})
+    //console.log('crt answer is',c_Ans)
+    showNext = "inline-block";
+    if (user_resp == c_Ans) {
+      showPopUp = randomCorrect();
+      return;
+    } else {
+      showPopUp = randomWrong();
+    }
   }
 </script>
 
 <div>
   <h4>Two-Dimensional Shapes</h4>
-  <h5>Which shape has {ques_Array[qIn]} sides?</h5>
-
+  <h5>Which shape has {ques_Array[qrn_In]} sides</h5>
   <div>
     <ul>
-      <li>
-        <input type="checkbox" id="mycheck1" />
-        <label for="mycheck1">
-          <img src={sImg[0]} alt="shape" />
-        </label>
-      </li>
-      <li>
-        <input type="checkbox" id="mycheck2" />
-        <label for="mycheck2">
-          <img src={sImg[1]} alt="shape" />
-        </label>
-      </li>
-      <li>
+      {#each  selectionArray as item, i }
+        <li>
+          <button id={"check" + i} on:click={assign_resp(selectionArray[i].s_optVal)}>
+          <label for={"check" + i}>
+            <img src={item.s_img} alt={item.s_optVal} />
+            <!-- <p>{item.s_opt}</p> -->
+          </label>
+          </button>
+        </li>
+      {/each}
+      <p>{user_resp}</p>
     </ul>
   </div>
   <br />
   <h5 style=" display: {showNext};" class="mt-5">{showPopUp}</h5>
   <div>
-    <button type="button" class="btn rerun" on:click={() => checkAns()}
+    <button type="button" class="btn rerun" on:click={result}
       >Submit</button
     >
-    <button type="button" class="btn rerun" on:click={() => initImgs()}
+    <button type="button" class="btn rerun" on:click={initImgs}
       >Rerun</button
     >
+    <p>the user resp is {user_resp}</p>
+    <p>the correct answer is {c_Ans}</p>
   </div>
-  <p>the correct answer is {c_Ans}</p>
 </div>
 
 <style>
@@ -124,9 +109,7 @@
     display: inline-block;
   }
 
-  input[type="checkbox"][id^="mycheck"] {
-    display: none;
-  }
+  
 
   label {
     border: 1px solid #fff;
@@ -162,15 +145,7 @@
     transform-origin: 50% 50%;
   }
 
-  :checked + label {
-    border-color: #ddd;
-  }
-
-  :checked + label:before {
-    content: "✓";
-    background-color: grey;
-    transform: scale(1);
-  }
+  
 
   :checked + label img {
     transform: scale(0.9);

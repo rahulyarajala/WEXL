@@ -1,5 +1,5 @@
 <script>
-  import {onMount} from "svelte"
+  import { shapeArray } from "./G1_MA_shapes"
   import { randomCorrect } from "../taskjs/right";
   import { randomWrong } from "../taskjs/wrong";
 
@@ -9,77 +9,46 @@
   let qrn_In = 0;
   let rn_for_US = [];
   let selectionArray = [
-    { sname: "", s_img: "", s_Status: false},
-    { sname: "", s_img: "", s_Status: false},
-    { sname: "", s_img: "", s_Status: false},
-    { sname: "", s_img: "", s_Status: false},
-  ];
-  let answer = false; 
-  let sArray = [
-    {s_Id: "s_0",shape:"Square", img_src:"images/shapes/box_with_red_square.png"},
-    {s_Id: "s_1",shape:"Square", img_src:"images/shapes/box_with_blue_square.png"},
-    {s_Id: "s_2",shape:"Square", img_src:"images/shapes/box_with_green_square.png"},
-    {s_Id: "s_3",shape:"Square", img_src:"images/shapes/box_with_yellow_square.png"},
-    {s_Id: "s_4",shape:"Square", img_src:"images/shapes/box_with_pink_square.png"},
-    {s_Id: "s_5",shape:"Square", img_src:"images/shapes/box_with_white_square.png"},
-    {s_Id: "s_6",shape:"Square", img_src:"images/shapes/box_with_black_square.png"},
-    {s_Id: "s_7",shape:"Triangle", img_src:"images/shapes/box_with_red_triangle.png"},
-    {s_Id: "s_8",shape:"Triangle", img_src:"images/shapes/box_with_blue_triangle.png"},
-    {s_Id: "s_9",shape:"Triangle", img_src:"images/shapes/box_with_green_triangle.png"},
-    {s_Id: "s_10",shape:"Triangle", img_src:"images/shapes/box_with_yellow_triangle.png"},
-    {s_Id: "s_11",shape:"Triangle", img_src:"images/shapes/box_with_pink_triangle.png"},
-    {s_Id: "s_12",shape:"Triangle", img_src:"images/shapes/box_with_white_triangle.png"},
-    {s_Id: "s_13",shape:"Triangle", img_src:"images/shapes/box_with_black_triangle.png"},
-    {s_Id: "s_14",shape:"Rectangle", img_src:"images/shapes/box_with_red_rectangle.png"},
-    {s_Id: "s_15",shape:"Rectangle", img_src:"images/shapes/box_with_blue_rectangle.png"},
-    {s_Id: "s_16",shape:"Rectangle", img_src:"images/shapes/box_with_green_rectangle.png"},
-    {s_Id: "s_17",shape:"Rectangle", img_src:"images/shapes/box_with_yellow_rectangle.png"},
-    {s_Id: "s_18",shape:"Rectangle", img_src:"images/shapes/box_with_pink_rectangle.png"},
-    {s_Id: "s_19",shape:"Rectangle", img_src:"images/shapes/box_with_white_rectangle.png"},
-    {s_Id: "s_20",shape:"Rectangle", img_src:"images/shapes/box_with_black_rectangle.png"},
-    {s_Id: "s_21",shape:"Circle", img_src:"images/shapes/box_with_red_circle.png"},
-    {s_Id: "s_22",shape:"Circle", img_src:"images/shapes/box_with_blue_circle.png"},
-    {s_Id: "s_23",shape:"Circle", img_src:"images/shapes/box_with_green_circle.png"},
-    {s_Id: "s_24",shape:"Circle", img_src:"images/shapes/box_with_yellow_circle.png"},
-    {s_Id: "s_25",shape:"Circle", img_src:"images/shapes/box_with_pink_circle.png"},
-    {s_Id: "s_26",shape:"Circle", img_src:"images/shapes/box_with_white_circle.png"},
-    {s_Id: "s_27",shape:"Circle", img_src:"images/shapes/box_with_black_circle.png"}
-  ];
-
+    { s_opt:"", s_img: "", opt_eval: null, s_Status: false},
+    { s_opt:"", s_img: "", opt_eval: null, s_Status: false},
+    { s_opt:"", s_img: "", opt_eval: null, s_Status: false},
+    { s_opt:"", s_img: "", opt_eval: null, s_Status: false},
+  ]; 
+  let sArray = shapeArray;
+  let cAns_cnt = 0;
+  let user_resp_cnt = 0;
   function initImgs() {
+    user_resp_cnt = 0;
+    cAns_cnt = 0;
     // random shape identified
     qrn_In = Math.floor(Math.random() * ques_Shape.length);
     //making the the false null for every reinitialization
-    answer = false;
+    
     //randomly fill 4 choices for user to select
     for (let i = 0; i < selectionArray.length; i++) {   
       rn_for_US[i] = Math.floor(Math.random() * sArray.length);
       selectionArray[i].s_img = sArray[rn_for_US[i]].img_src;
-      selectionArray[i].sname = sArray[rn_for_US[i]].shape;
+      selectionArray[i].s_opt = sArray[rn_for_US[i]].s_name;
     };
-
     //check to see if the question shape is present in user selection
     // if not, it must be added
-    //console.log('before shape present count')
     let shp_present_cnt = 0;
     for (let i = 0; i < selectionArray.length; i++) {     
-      if (selectionArray[i].shape == ques_Shape[qrn_In]) {
+      if (selectionArray[i].s_name == ques_Shape[qrn_In]) {
         shp_present_cnt++;
       };
     };
-    
-    // answer not found in selection
-          
+    // answer not found in selection   
     if (shp_present_cnt == 0) {
       //console.log("in shp_count",{shp_present_cnt});
       let rn1 = Math.floor(Math.random() * selectionArray.length); //random item to be changed in selection items
       // random item to be used as an answer from the source of shapes
-      let rn2 = Math.floor(Math.random() * sArray.filter(sItem => {return sItem.shape.includes(ques_Shape[qrn_In])}).length);  
-      //console.log("length of filtered array", sArray.filter(sItem => {return sItem.shape.includes(ques_Shape[qrn_In])}).length);
+      let rn2 = Math.floor(Math.random() * sArray.filter(sItem => {return sItem.s_name.includes(ques_Shape[qrn_In])}).length);  
+      //console.log("length of filtered array", sArray.filter(sItem => {return sItems_name.includes(ques_Shape[qrn_In])}).length);
       //console.log('shape present geerated random numbers',{rn},{rn2})
       //replace one of the selections with the required answer so that user may find answer in selection
-      selectionArray[rn1].s_img = sArray.filter(sItem => {return sItem.shape.includes(ques_Shape[qrn_In])})[rn2].img_src;
-      selectionArray[rn1].sname = sArray.filter(sItem => {return sItem.shape.includes(ques_Shape[qrn_In])})[rn2].shape;
+      selectionArray[rn1].s_img = sArray.filter(sItem => {return sItem.s_name.includes(ques_Shape[qrn_In])})[rn2].img_src;
+      selectionArray[rn1].s_opt = sArray.filter(sItem => {return sItem.s_name.includes(ques_Shape[qrn_In])})[rn2].s_name;
     }
 
     showPopUp = null;
@@ -88,30 +57,44 @@
   initImgs();
 
   function result() {
+    user_resp_cnt = 0;
+    cAns_cnt = 0;
     console.log('inside result')
     for(let i=0;i<selectionArray.length;i++){
-      console.log('inside of for in result ');
-      if(selectionArray[i].s_Status == true){
-        console.log('if checked')
-        if(selectionArray[i].sname == ques_Shape[qrn_In]){
-          answer = true;
-          console.log('if matched answer = ',{answer})
-        }
-        else{
-          answer = false;
-          console.log('wrong answer if ans =',{answer})
+      //count of crt answers displayed
+      if(selectionArray[i].s_opt == ques_Shape[qrn_In]){
+        cAns_cnt++;
+        //console.log("dis cnt value",cAns_cnt)
+      }
+      if(selectionArray[i].s_opt == ques_Shape[qrn_In]){
+        if(selectionArray[i].s_Status == true){
+          user_resp_cnt++;
         }
       }
-      else if(selectionArray[i].s_Status == false){
-        if(selectionArray[i].sname == ques_Shape[qrn_In]){
-          answer = false;
-          console.log('wrong answer if ans =',{answer})
-        }
-      }
-    }
-    console.log('the final answer after checking is',{answer})
+      //  if(selectionArray[i].s_Status == true){
+      //    console.log('if checked')
+      //    if(selectionArray[i].s_opt == ques_Shape[qrn_In]){
+      //      answer = true;
+      //      console.log('if matched answer = ',{answer})
+      //    }
+      //    else{
+      //      answer = false;
+      //      console.log('wrong answer if ans =',{answer})
+      //    }
+      //  }
+      //  else if(selectionArray[i].s_Status == false){
+      //    if(selectionArray[i].s_opt == ques_Shape[qrn_In]){
+      //      answer = false;
+      //      console.log('wrong answer if ans =',{answer})
+      //    }
+      //  }
+     }
+     console.log("dis cnt value",cAns_cnt)
+     console.log("user cnt value",user_resp_cnt)
+    
+    
       showNext = "inline-block";
-      if (answer == true) {
+      if (user_resp_cnt == cAns_cnt) {
         showPopUp = randomCorrect();
         return;
       } else {
@@ -129,7 +112,8 @@
         <li>
           <input type="checkbox" id={"check" + i} bind:checked={item.s_Status}/>
           <label for={"check" + i}>
-            <img src={item.s_img} alt={item.sname} />
+            <img src={item.s_img} alt={item.s_opt} />
+            <p>{item.s_opt}</p>
           </label>
         </li>
       {/each}
@@ -152,6 +136,7 @@
     <button type="button" class="btn rerun" on:click={initImgs}
       >Rerun</button
     >
+    <p>the user resp is {cAns_cnt}</p>
   </div>
 </div>
 

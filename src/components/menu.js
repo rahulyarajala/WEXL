@@ -14,6 +14,9 @@ import G1_MD_M1 from "./taskComponents/G1_MD_M1.svelte"
 import G1_MD_M2 from "./taskComponents/G1_MD_M2.svelte"
 import G1_MD_M3 from "./taskComponents/G1_MD_M3.svelte"
 import G1_MD_M4 from "./taskComponents/G1_MD_M4.svelte"
+import G1_MD_M5 from "./taskComponents/G1_MD_M5.svelte"
+import G1_MD_M7 from "./taskComponents/G1_MD_M7.svelte"
+import rough12 from "./taskComponents/rough12.svelte"
 
 import G1_MA_A2 from "./G1_MA_A2.svelte";
 import GIII_MA_C3 from "./taskComponents/GIII_MA_C3.svelte";
@@ -1165,7 +1168,7 @@ export const act_list = {
       components: [
         {
           act_text: "Counting review - up to 10",
-          comp: null,
+          comp: rough12,
         },
         {
           act_text: "Count to fill a ten frame",
@@ -1698,12 +1701,16 @@ export const act_list = {
           comp: G1_MD_M4,
         },
         {
+          act_text: "Open and closed shapes",
+          comp: G1_MD_M5,
+        },
+        {
           act_text: "Flip, turn and slide",
           comp: null,
         },
         {
           act_text: "Symmetry",
-          comp: null,
+          comp: G1_MD_M7,
         },
       ],
     },

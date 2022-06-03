@@ -2,13 +2,13 @@
     import { randomCorrect } from "../taskjs/right";
     import { randomWrong } from "../taskjs/wrong";
   
-    let sImg = "";
+    let ques_Img = "";
     let rnIn = 0;
     let user_resp = null ;
     let showPopUp;
     let showNext = "none"; 
     let c_Ans = 0;
-    let def_ans= false ;
+    
     
   
     
@@ -24,7 +24,7 @@
     function initImgs() {
       user_resp = null;
       rnIn = Math.floor(Math.random() * sArray.length);
-      sImg = sArray[rnIn].img_src;
+      ques_Img = sArray[rnIn].img_src;
       c_Ans = sArray[rnIn].sides;
       showNext = "none"; 
       //def_ans = false;
@@ -53,7 +53,7 @@
     <h4>Two-Dimensional Shapes</h4>
     <h5>How many sides does this Shape have ?</h5>
     <div>
-      <img src={sImg} alt="shapes" width="30%" />
+      <img src={ques_Img} alt="shapes" width="30%" />
     </div>
     <div>
       <input type="number" bind:value={user_resp} class="btn rnAns" >      
